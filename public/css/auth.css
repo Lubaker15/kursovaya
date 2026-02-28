@@ -1,0 +1,180 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+}
+
+.page {
+  background-color: #0E0821;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.logo {
+  background: #ffffff;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.auth {
+  background-color: #26145E;
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(148, 201, 31, 0.2);
+  text-align: center;
+}
+.auth__tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  background-color: rgb(29.5, 15.5263157895, 72.9736842105);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.auth__tab {
+  flex: 1;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.auth__tab--active {
+  background-color: #94C91F;
+  color: #000;
+}
+.auth__content {
+  position: relative;
+}
+.auth__form {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+.auth__form--active {
+  display: flex;
+}
+.auth__field {
+  text-align: left;
+}
+.auth__label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+.auth__input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  color: #1E1E1E;
+  font-size: 14px;
+}
+.auth__input:focus {
+  outline: none;
+  border-color: #94C91F;
+}
+.auth__button {
+  background-color: #94C91F;
+  color: #000;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.auth__button:hover {
+  background-color: rgb(172.8103448276, 224.6681034483, 58.3318965517);
+}
+.auth__link {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #bbbbbb;
+  text-decoration: underline;
+}
+.auth__link:hover {
+  color: #94C91F;
+}
+
+.auth__message {
+  display: none;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.auth__message.error {
+  color: #a00;
+  background: #ffe5e5;
+}
+
+.auth__message.success {
+  color: #0a0;
+  background: #e5ffe5;
+}
+
+/* Стили для ошибок валидации */
+.auth__field {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.auth__error {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+  display: none;
+}
+
+.auth__error.show {
+  display: block;
+}
+
+.auth__input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1);
+}
+
+.auth__input.valid {
+  border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.1);
+}
+
+.password-strength {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.password-strength.weak {
+  color: #dc3545;
+}
+
+.password-strength.medium {
+  color: #ffc107;
+}
+
+.password-strength.strong {
+  color: #28a745;
+}
+
+.phone-hint {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 5px;
+}/*# sourceMappingURL=auth.css.map */
