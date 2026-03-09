@@ -25,7 +25,7 @@
                 @csrf
                 <div class="auth__field">
                     <label class="auth__label" for="login-email">E-mail</label>
-                    <input name="email" class="auth__input" type="email" id="login-email" required />
+                    <input value="{{ old('email') }}" name="email" class="auth__input" type="email" id="login-email" required />
                     <span class="auth__error" id="login-email-error"></span>
                 </div>
                 <div class="auth__field">
@@ -34,6 +34,12 @@
                     <span class="auth__error" id="login-password-error"></span>
                 </div>
                 <button type="submit" class="auth__button">Войти</button>
+                @error('email')
+                    <span style="color:red;" class="error">{{ $message }}</span>
+                @enderror
+                @error('login')
+                    <span style="color:red;" class="error">{{ $message }}</span>
+                @enderror
             </form>
 
             <!-- Регистрация -->

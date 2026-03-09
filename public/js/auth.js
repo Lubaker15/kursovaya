@@ -219,8 +219,8 @@ class AuthValidation {
             this.showFieldError(nameInput, errorElement, `${fieldName} должно содержать минимум 2 символа`);
             return false;
         }
-        if (!/^[a-zA-Zа-яА-ЯёЁ\s\-]+$/.test(name)) {
-            this.showFieldError(nameInput, errorElement, `${fieldName} может содержать только буквы, пробелы и дефисы`);
+        if (!/^[а-яА-ЯёЁ\s\-]+$/.test(name)) {
+            this.showFieldError(nameInput, errorElement, `${fieldName} может содержать только русские буквы, пробелы и дефисы`);
             return false;
         }
         this.showFieldSuccess(nameInput, errorElement);

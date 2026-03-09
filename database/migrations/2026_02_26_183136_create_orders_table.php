@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('cart_id')->nullable()->constrained('carts')->onDelete('set null');
             $table->timestamp('order_date')->useCurrent();
-            $table->string('deliveery_address');
+            $table->string('delivery_address');
             $table->string('payment_status')->default('pending');
+            $table->decimal('total', 10, 2)->nullable();
             $table->timestamps();
         });
     }

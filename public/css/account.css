@@ -24,6 +24,11 @@
   }
 }
 
+
+.first-section-full-bg{
+  padding: 50px;
+}
+
 .lk-sidebar {
   flex: 0 0 280px;
   background-color: #f8f9fa;
@@ -140,7 +145,77 @@
     margin: 0 0 5px 0;
   }
 }
+.profile-data{
+  display: flex;
+  gap: 50px;
+}
+.user-section{
+  flex: 1;
+}
+.form-action{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+form{
+  margin: 0;
+}
 
+.btn-save{
+  background-color: #94C91F;
+  border: 0;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  transition: all .1s;
+}
+.btn-save:hover{
+  background-color: #78a31b;
+}
+
+.btn-success{
+  background-color: #78a31b;
+  border: 0;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  transition: all .1s;
+  font-size: 14px;
+}
+
+.btn-success:hover{
+  background-color: #93c625;
+}
+
+.btn-logout{
+  background-color: #c91f1f;
+  border: 0;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  transition: all .1s;
+}
+
+.btn-logout:hover{
+  background-color: #9f1717;
+}
+
+.form-control:focus{
+  border-color: #26145e;
+  box-shadow: 0 0 0 .15rem #27145e52;
+}
 .lk-content {
   flex-grow: 1;
   background-color: #fff;
@@ -161,7 +236,9 @@
   border-bottom: 2px solid #e9ecef;
   padding-bottom: 10px;
 }
-
+.row{
+  justify-content: center;
+}
 .lk-form {
   max-width: 600px;
 }
@@ -303,6 +380,15 @@
   transform: none;
 }
 
+.nav-link{
+  color: #26145e;
+}
+.nav-link:hover{
+  color: #26145e;
+}
+.footer{
+  background: linear-gradient(180deg, #EAEAEA 0%, #FFFFFF 10.53%);
+}
 .btn-payment {
   background-color: #94C91F;
   border: 0;

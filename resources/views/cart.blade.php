@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="{{ asset('css/style.css')}}">
     <link rel="stylesheet" href="{{ asset('css/index.css')}}">
     <link rel="stylesheet" href="{{ asset('css/cart.css')}}">
-    <script defer src="./js/cart.js"></script>
+    <!-- <script defer src="./js/cart.js"></script> -->
     <script defer src="{{ asset('js/main.js')}}"></script>
-    <script defer src="./js/cart-page.js"></script>
-    <script defer src="./js/search.js"></script>
+    <!-- <script defer src="./js/cart-page.js"></script> -->
+    <!-- <script defer src="./js/search.js"></script> -->
     <title>Корзина</title>
 </head>
 <body>
@@ -24,54 +24,94 @@
             <h1 class="cart-title">Корзина</h1>
             
             <div class="cart-container">
+                @if(count($products) > 0)
+                    <div class="cart-header">
+                        <div>Товар</div>
+                        <div>Цена</div>
+                        <div>Количество</div>
+                        <div>Итого</div>
+                        <div></div>
+                    </div>
+                    @foreach($products as $item)
+                        <div class="cart-item" data-product-id="{{ $item['product']->id }}">
+                            <div class="product-info">
+                                <img src="{{ asset($item['product']->image_url ?? 'images/no_image.png') }}" alt="{{ $item['product']->product_name }}" class="product-image">
+                                <div>
+                                    <div class="product-name">{{ $item['product']->product_name }}</div>
+                                    <div class="product-category">{{ $item['product']->category->category_name ?? '' }}</div>
+                                </div>
+                            </div>
+                            <div class="product-price">{{ number_format($item['product']->unit_price, 0, '.', ' ') }} ₽</div>
+                            <div class="quantity-controls">
+                                <form action="{{ route('cart.update', $item['product']->id) }}" method="POST" style="display: flex; align-items: center;">
+                                    @csrf
+                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" 
+                                        min="1" max="{{ $item['product']->stock_quantity }}" 
+                                        class="quantity-input" style="width: 60px;" 
+                                        onchange="this.form.submit()">
+                                </form>
+                            </div>
+                            <div class="item-total">{{ number_format($item['subtotal'], 0, '.', ' ') }} ₽</div>
+                            <form action="{{ route('cart.remove', $item['product']->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="remove-btn">×</button>
+                            </form>
+                        </div>
+                    @endforeach
+                    <div class="cart-summary">
+                        <div class="total-price">Итого: {{ number_format($total, 0, '.', ' ') }} ₽</div>
+                        @auth
+                        <button type="button" class="checkout-btn" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                            Оформить заказ
+                        </button>
+                        @else
+                        <a href="/auth?message=login_required" class="checkout-btn">
+                            Оформить заказ
+                        </a>
+                        @endauth
+                    </div>
+                @else
+                    <div class="empty-cart">
+                        <h2 class="empty-cart-title">Корзина пуста</h2>
+                        <p class="empty-cart-text">В вашей корзине пока нет товаров. Перейдите в каталог, чтобы добавить товары в корзину.</p>
+                        <a href="/catalog" class="btn-catalog">Перейти в каталог</a>
+                    </div>
+                @endif
             </div>
             
-            <a href="/catalog.html" class="continue-shopping">← Продолжить покупки</a>
+            <a href="/catalog" class="continue-shopping">← Продолжить покупки</a>
         </div>
     </section>
 
-    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="checkoutModalLabel">Оформление заказа</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="checkout-summary mb-4">
-                        <h6>Содержимое заказа:</h6>
-                        <div id="checkout-items-list">
-
-                        </div>
-                        <div class="checkout-total mt-3 pt-3 border-top">
-                            <strong>Итого: <span id="checkout-total-price">0 ₽</span></strong>
-                        </div>
+                <form action="{{ route('order.place') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Оформление заказа</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    
-                    <form id="checkout-form">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="delivery-address" class="form-label">Адрес доставки</label>
-                            <textarea class="form-control" id="delivery-address" rows="3" placeholder="Введите адрес доставки" required></textarea>
-                            <div class="form-text">Укажите полный адрес для доставки</div>
+                            <label for="address" class="form-label">Адрес доставки</label>
+                            <textarea name="address" id="address" class="form-control" rows="3" required>{{ auth()->user()->address ?? '' }}</textarea>
                         </div>
-                        
-                        <div id="saved-address-section" class="mb-3" style="display: none;">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="use-saved-address">
-                                <label class="form-check-label" for="use-saved-address">
-                                    Использовать сохраненный адрес
+                        @if(auth()->check() && auth()->user()->address)
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="useSavedAddress" checked 
+                                    onclick="document.getElementById('address').value = this.checked ? '{{ auth()->user()->address }}' : ''">
+                                <label class="form-check-label" for="useSavedAddress">
+                                    Использовать сохранённый адрес
                                 </label>
                             </div>
-                            <div id="saved-address-info" class="mt-2 p-2 bg-light rounded">
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-success" id="confirm-checkout">Подтвердить заказ</button>
-                </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-success">Подтвердить заказ</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -92,52 +132,37 @@
                     <p>Спасибо за покупку! Мы свяжемся с вами для уточнения деталей доставки.</p>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" id="go-to-main">На главную</button>
-                    <button type="button" class="btn btn-outline-primary" id="view-orders">Мои заказы</button>
+                    <button type="button" class="btn btn-primary" id="go-to-main"><a href="/">На главную</a></button>
+                    <button type="button" class="btn btn-outline-primary" id="view-orders"><a href="{{ route('account.orders') }}">Мои заказы</a></button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container footer__container">
-            <div class="footer__column">
-                <img src="./icons/logo.png" alt="Байт логотип" class="footer__logo">
-                <p>Email: <a href="mailto:info@bytesp.ru">info@bytesp.ru</a></p>
-                <p><img src="./icons/phone-black.svg" alt="Phone" class="icon"> 7-925-047-81-12</p>
-                <p><img src="./icons/vk-black.svg" alt="VK" class="icon"> <a href="https://vk.com/bytesp">Мы в
-                        ВКонтакте</a></p>
-            </div>
-            <div class="footer__column">
-                <h4>Компания</h4>
-                <ul>
-                    <li><a href="#">Новости</a></li>
-                    <li><a href="#">О компании</a></li>
-                </ul>
-            </div>
-            <div class="footer__column">
-                <h4>Информация</h4>
-                <ul>
-                    <li><a href="#">Услуги по ремонту</a></li>
-                    <li><a href="#">Обслуживание</a></li>
-                </ul>
-            </div>
-            <div class="footer__column">
-                <h4>Помощь</h4>
-                <ul>
-                    <li><a href="#">Условия доставки</a></li>
-                    <li><a href="#">Условия оплаты</a></li>
-                </ul>
-            </div>
-            <div class="footer__column">
-                <h4>Режим работы</h4>
-                <p>Будни: с 10:00 до 20:00</p>
-                <p>Суббота: с 10:00 до 18:00</p>
-                <p>Воскресенье: с 10:00 до 17:00</p>
-            </div>
-        </div>
-    </footer>
+    <x-footer></x-footer>
 
+
+
+    <script>
+    document.getElementById('useSavedAddress')?.addEventListener('change', function() {
+        const addressField = document.getElementById('address');
+        if (this.checked) {
+            addressField.value = '{{ auth()->user()->address ?? '' }}';
+        } else {
+            addressField.value = '';
+        }
+    });
+    </script>
+    @if(session('order_success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('order-number').textContent = '#' + {{ session('order_id') }};
+            
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        });
+    </script>
+    @endif
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>

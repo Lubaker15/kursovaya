@@ -1,0 +1,18 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Редактировать категорию')
+
+@section('content')
+    <h1>Редактировать категорию: {{ $category->category_name }}</h1>
+    <form action="{{ route('admin.categories.update', $category) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <div class="mb-3">
+            <label for="category_name" class="form-label">Название категории</label>
+            <input type="text" class="form-control @error('category_name') is-invalid @enderror" id="category_name" name="category_name" value="{{ old('category_name', $category->category_name) }}" required>
+            @error('category_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
+        <button type="submit" class="btn btn-primary">Обновить</button>
+        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Отмена</a>
+    </form>
+@endsection

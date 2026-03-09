@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
@@ -9,10 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/style.css')}}">
-    <script defer src="./js/products.js"></script>
-    <script defer src="./js/cart.js"></script>
     <script defer src="{{ asset('js/main.js')}}"></script>
-    <script defer src="./js/search.js"></script>
     <title>Байт</title>
 </head>
 
@@ -36,7 +33,7 @@
                         <h2>Игровые ноутбуки</h2>
                         <span>Подойдут для игр и профессиональных задач</span>
                     </div>
-                    <a href="catalog.html" class="btn btn__btn-transition">Перейти</a>
+                    <a href="/catalog" class="btn btn__btn-transition">Перейти</a>
                 </div>
             </div>
             <div class="carousel-item">
@@ -46,7 +43,7 @@
                         <h2>Игровые ноутбуки</h2>
                         <span>Подойдут для игр и профессиональных задач</span>
                     </div>
-                    <a href="catalog.html" class="btn btn__btn-transition">Перейти</a>
+                    <a href="/catalog" class="btn btn__btn-transition">Перейти</a>
                 </div>
             </div>
             <div class="carousel-item">
@@ -56,7 +53,7 @@
                         <h2>Игровые ноутбуки</h2>
                         <span>Подойдут для игр и профессиональных задач</span>
                     </div>
-                    <a href="catalog.html" class="btn btn__btn-transition">Перейти</a>
+                    <a href="/catalog" class="btn btn__btn-transition">Перейти</a>
                 </div>
             </div>
         </div>
@@ -80,7 +77,26 @@
                 <span>Акции</span>
             </div>
             <div id="products-container" class="first-section__card-section">
-
+                @foreach($latestProducts as $product)
+                <div class="product-card">
+                    <img src="{{ asset($product->image_url ?? 'images/no_image.png') }}" alt="{{ $product->product_name }}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-price">{{ number_format($product->unit_price, 0, '.', ' ') }}<span> ₽</span></div>
+                        <div class="product-title">{{ $product->product_name }}</div>
+                        <div class="product-actions">
+                            <a href="{{ route('product.show', $product->id) }}" class="btn btn__btn-basket-card">Перейти</a>
+                            <form action="{{ route('cart.add') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                    <img src="{{ asset('img/cart.png') }}" alt="В корзину" class="cart-icon">
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -110,44 +126,9 @@
             </div>
         </div>
     </section>
-    <footer class="footer">
-        <div class="container footer__container">
-            <div class="footer__column">
-                <img src="./icons/logo.png" alt="Байт логотип" class="footer__logo">
-                <p>Email: <a href="mailto:info@bytesp.ru">info@bytesp.ru</a></p>
-                <p><img src="./icons/phone-black.svg" alt="Phone" class="icon"> 7-925-047-81-12</p>
-                <p><img src="./icons/vk-black.svg" alt="VK" class="icon"> <a href="https://vk.com/bytesp">Мы в
-                        ВКонтакте</a></p>
-            </div>
-            <div class="footer__column">
-                <h4>Компания</h4>
-                <ul>
-                    <li><a href="#">Новости</a></li>
-                    <li><a href="#">О компании</a></li>
-                </ul>
-            </div>
-            <div class="footer__column">
-                <h4>Информация</h4>
-                <ul>
-                    <li><a href="#">Услуги по ремонту</a></li>
-                    <li><a href="#">Обслуживание</a></li>
-                </ul>
-            </div>
-            <div class="footer__column">
-                <h4>Помощь</h4>
-                <ul>
-                    <li><a href="#">Условия доставки</a></li>
-                    <li><a href="#">Условия оплаты</a></li>
-                </ul>
-            </div>
-            <div class="footer__column">
-                <h4>Режим работы</h4>
-                <p>Будни: с 10:00 до 20:00</p>
-                <p>Суббота: с 10:00 до 18:00</p>
-                <p>Воскресенье: с 10:00 до 17:00</p>
-            </div>
-        </div>
-    </footer>
+
+    <x-footer></x-footer>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
