@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css')}}">
     <link rel="stylesheet" href="{{ asset('css/catalog.css')}}">
     <script defer src="{{ asset('js/main.js')}}"></script>
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     @stack('styles')
 </head>
 <body>
@@ -22,9 +23,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Дашборд</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.products.index') }}">Товары</a>
                     </li>

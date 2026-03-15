@@ -21,7 +21,7 @@
 
         <div class="auth__content">
             <!-- Вход -->
-            <form class="auth__form auth__form--active" id="login-form" method='POST' action="{{ route('login')}}">
+            <form class="auth__form auth__form--active" id="login-form" method='POST' action="{{ route('login.post')}}">
                 @csrf
                 <div class="auth__field">
                     <label class="auth__label" for="login-email">E-mail</label>
